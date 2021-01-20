@@ -26,6 +26,13 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  
+  <script src="https://hcaptcha.com/1/api.js" async defer></script>
+  <script type="text/javascript">
+    var showButton = function () {
+      document.getElementById("buttonSubmit").style.display = "initial";
+    };
+  </script>
 
   <!-- =======================================================
   * Template Name: Maxim - v2.1.0
@@ -699,7 +706,7 @@
         <div class="row mt-5 justify-content-center" data-aos="fade-up">
           <div class="col-lg-10">
             <form action="https://api.staticforms.xyz/submit" method="post" class="php-email-form">
-              <input type="hidden" name="accessKey" value="b70c3159-9549-406e-b563-2f26e3093736"> <!-- Required -->
+              <input type="hidden" name="accessKey" value="8231767f-b226-413a-9b10-6c15f4bf06d6"> <!-- Required -->
               
               <div class="form-row">
                 <div class="col-md-6 form-group">
@@ -722,6 +729,12 @@
                 <div class="validate"></div>
               </div>
 
+              <div
+                class="h-captcha text-center"
+                data-sitekey="b1bc89c4-290f-47d6-a44c-f9d518014de7"
+                data-callback="showButton"
+              ></div>
+
               <div class="mb-3">
                 <div class="loading">Carregando</div>
                 <div class="error-message">Ocorreu um erro inesperado. Entre em contato através das redes sociais :(</div>
@@ -729,8 +742,8 @@
               </div>
 
               <!-- <input type="hidden" name="replyTo" value="@"> -->
+              <div class="text-center"><button id="buttonSubmit" type="submit">Enviar mensagem</button></div>
 
-              <div class="text-center"><button type="submit">Enviar mensagem</button></div>
             </form>
           </div>
 
