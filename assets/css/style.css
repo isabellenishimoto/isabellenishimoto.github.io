@@ -1148,6 +1148,14 @@ section {
   font-weight: 600;
 }
 
+.contact .php-email-form .hcaptcha-message {
+  display: none;
+  color: #0c0c0c;
+  text-align: center;
+  padding: 15px;
+  font-weight: 600;
+}
+
 .contact .php-email-form .sent-message {
   display: none;
   color: #0c0c0c;
@@ -1367,8 +1375,4 @@ section {
   text-align: center;
   font-size: 13px;
   color: #fff;
-}
-
-#buttonSubmit {
-  display: none;
 }

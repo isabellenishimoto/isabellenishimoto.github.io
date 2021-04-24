@@ -88,6 +88,7 @@ jQuery(document).ready(function($) {
         i.next('.validate').html((ierror ? (i.attr('data-msg') != undefined ? i.attr('data-msg') : 'wrong Input') : '')).show('blind');
       }
     });
+
     if (ferror) return false;
     else var str = $(this).serialize();
 
@@ -102,23 +103,57 @@ jQuery(document).ready(function($) {
     
     this_form.find('.sent-message').slideUp();
     this_form.find('.error-message').slideUp();
+    this_form.find('.hcaptcha-message').slideUp();
     this_form.find('.loading').slideDown();
-    
+
+    const hCaptcha = document.getElementsByClassName("h-captcha")[0].firstChild;
+
+    if (hCaptcha) {
+      const hCaptchaAttribute = hCaptcha.getAttribute("data-hcaptcha-response");
+
+      if (!hCaptchaAttribute) {
+        this_form.find('.loading').slideUp();
+        this_form.find('.hcaptcha-message').slideDown();
+        event.preventDefault();
+        return;               
+      } 
+    } else {
+      this_form.find('.loading').slideUp();
+      this_form.find('.hcaptcha-message').slideDown();
+      event.preventDefault();
+      return;
+    }
+
+    const strFormated = JSON.parse('{"' + decodeURI(str).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+
     $.ajax({
       type: "POST",
-      url: action,
-      data: str,
+      url: "https://hcaptcha.com/siteverify?" + $.param({ secret: "0xB67D8Fc1b2eCb4498FcDF4D3070E04b527E5827C" }) + $.param({ response: strFormated["h-captcha-response"] }),
       success: function(msg) {
-        if (msg.success === true) {
-          this_form.find('.loading').slideUp();
-          this_form.find('.sent-message').slideDown();
-          this_form.find("input:not(input[type=submit]), textarea").val('');
-        } else {
-          this_form.find('.loading').slideUp();
-          this_form.find('.error-message').slideDown().html(msg);
+        if (msg && msg.success === true) {
+          $.ajax({
+            type: "POST",
+            url: action,
+            data: str,
+            success: function(msg) {
+              if (msg.success === true) {
+                this_form.find('.loading').slideUp();
+                this_form.find('.sent-message').slideDown();
+                this_form.find("input:not(input[type=submit]), textarea").val('');
+              } else {
+                this_form.find('.loading').slideUp();
+                this_form.find('.error-message').slideDown();
+              }
+            }
+          });
         }
+      },
+      error: function () {
+        this_form.find('.loading').slideUp();
+        this_form.find('.error-message').slideDown();
       }
     });
+
     return false;
   });
 
