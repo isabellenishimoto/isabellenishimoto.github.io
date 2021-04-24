@@ -124,33 +124,19 @@ jQuery(document).ready(function($) {
       return;
     }
 
-    const strFormated = JSON.parse('{"' + decodeURI(str).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
-
     $.ajax({
       type: "POST",
-      url: "https://hcaptcha.com/siteverify?" + $.param({ secret: "0xB67D8Fc1b2eCb4498FcDF4D3070E04b527E5827C" }) + $.param({ response: strFormated["h-captcha-response"] }),
+      url: action,
+      data: str,
       success: function(msg) {
-        if (msg && msg.success === true) {
-          $.ajax({
-            type: "POST",
-            url: action,
-            data: str,
-            success: function(msg) {
-              if (msg.success === true) {
-                this_form.find('.loading').slideUp();
-                this_form.find('.sent-message').slideDown();
-                this_form.find("input:not(input[type=submit]), textarea").val('');
-              } else {
-                this_form.find('.loading').slideUp();
-                this_form.find('.error-message').slideDown();
-              }
-            }
-          });
+        if (msg.success === true) {
+          this_form.find('.loading').slideUp();
+          this_form.find('.sent-message').slideDown();
+          this_form.find("input:not(input[type=submit]), textarea").val('');
+        } else {
+          this_form.find('.loading').slideUp();
+          this_form.find('.error-message').slideDown();
         }
-      },
-      error: function () {
-        this_form.find('.loading').slideUp();
-        this_form.find('.error-message').slideDown();
       }
     });
 
